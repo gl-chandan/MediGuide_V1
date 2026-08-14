@@ -67,9 +67,7 @@ METADATA_PATH = os.path.join(
 # NLTK
 # ============================================================
 
-nltk.download("punkt")
-nltk.download("punkt_tab")
-nltk.download("wordnet")
+
 
 
 # ============================================================

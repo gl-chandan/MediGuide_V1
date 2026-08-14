@@ -1,32 +1,35 @@
 import os
+import zipfile
+import urllib.request
 import nltk
 
 
 # ============================================================
-# BASE DIRECTORY
+# PATH
 # ============================================================
 
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
 )
 
-
-# ============================================================
-# NLTK DATA DIRECTORY
-# ============================================================
-
 NLTK_DATA_DIR = os.path.join(
     BASE_DIR,
     "nltk_data"
 )
 
+CORPORA_DIR = os.path.join(
+    NLTK_DATA_DIR,
+    "corpora"
+)
+
 
 os.makedirs(
-    NLTK_DATA_DIR,
+    CORPORA_DIR,
     exist_ok=True
 )
 
 
+# Tell NLTK where our resources are
 nltk.data.path.insert(
     0,
     NLTK_DATA_DIR
@@ -40,42 +43,83 @@ print(
 
 
 # ============================================================
-# DOWNLOAD NLTK RESOURCES
+# DOWNLOAD NORMAL NLTK RESOURCES
 # ============================================================
 
-print(
-    "Downloading NLTK resources..."
+print("\nDownloading NLTK resources...")
+
+nltk.download(
+    "punkt",
+    download_dir=NLTK_DATA_DIR
+)
+
+nltk.download(
+    "punkt_tab",
+    download_dir=NLTK_DATA_DIR
 )
 
 
-resources = [
-    "punkt",
-    "punkt_tab",
-    "wordnet",
-]
+# ============================================================
+# WORDNET
+# ============================================================
+
+WORDNET_DIR = os.path.join(
+    CORPORA_DIR,
+    "wordnet"
+)
+
+WORDNET_ZIP = os.path.join(
+    CORPORA_DIR,
+    "wordnet.zip"
+)
 
 
-for resource in resources:
+# WordNet package from NLTK data repository
+WORDNET_URL = (
+    "https://raw.githubusercontent.com/"
+    "nltk/nltk_data/gh-pages/packages/corpora/wordnet.zip"
+)
+
+
+if not os.path.exists(
+    WORDNET_DIR
+):
 
     print(
-        f"Downloading: {resource}"
+        "\nDownloading WordNet manually..."
     )
 
-    success = nltk.download(
-        resource,
-        download_dir=NLTK_DATA_DIR,
-        quiet=False
+    urllib.request.urlretrieve(
+        WORDNET_URL,
+        WORDNET_ZIP
     )
 
-    if not success:
+    print(
+        "WordNet ZIP downloaded."
+    )
 
-        raise RuntimeError(
-            f"Failed to download NLTK resource: {resource}"
+
+    print(
+        "Extracting WordNet..."
+    )
+
+    with zipfile.ZipFile(
+        WORDNET_ZIP,
+        "r"
+    ) as zip_ref:
+
+        zip_ref.extractall(
+            CORPORA_DIR
         )
 
 
+    print(
+        "WordNet extracted."
+    )
+
+
 # ============================================================
-# VERIFY RESOURCES
+# VERIFY
 # ============================================================
 
 print(
@@ -83,14 +127,20 @@ print(
 )
 
 
-checks = [
-    "tokenizers/punkt",
-    "tokenizers/punkt_tab",
-    "corpora/wordnet",
-]
+resources = {
+
+    "punkt":
+        "tokenizers/punkt",
+
+    "punkt_tab":
+        "tokenizers/punkt_tab",
+
+    "wordnet":
+        "corpora/wordnet"
+}
 
 
-for resource in checks:
+for name, resource in resources.items():
 
     try:
 
@@ -111,6 +161,31 @@ for resource in checks:
         raise
 
 
+# ============================================================
+# TEST WORDNET
+# ============================================================
+
+from nltk.stem import WordNetLemmatizer
+
+
+lemmatizer = WordNetLemmatizer()
+
+
+test_word = lemmatizer.lemmatize(
+    "running"
+)
+
+
 print(
-    "\nNLTK resources downloaded and verified successfully"
+    "\nWordNet test successful."
+)
+
+print(
+    "running ->",
+    test_word
+)
+
+
+print(
+    "\nNLTK resources installed successfully."
 )

@@ -7,8 +7,7 @@ import re
 import joblib
 import nltk
 
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
+
 
 # ============================================================
 # BASE DIRECTORY
@@ -51,6 +50,8 @@ print(
 # ============================================================
 # VERIFY NLTK RESOURCES
 # ============================================================
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
 
 try:
 

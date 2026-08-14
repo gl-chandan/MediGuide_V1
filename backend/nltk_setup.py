@@ -27,6 +27,12 @@ os.makedirs(
 )
 
 
+nltk.data.path.insert(
+    0,
+    NLTK_DATA_DIR
+)
+
+
 print(
     "NLTK DATA DIRECTORY:",
     NLTK_DATA_DIR
@@ -37,53 +43,74 @@ print(
 # DOWNLOAD NLTK RESOURCES
 # ============================================================
 
-print("Downloading NLTK resources...")
+print(
+    "Downloading NLTK resources..."
+)
 
 
-nltk.download(
+resources = [
     "punkt",
-    download_dir=NLTK_DATA_DIR
-)
-
-
-nltk.download(
     "punkt_tab",
-    download_dir=NLTK_DATA_DIR
-)
-
-
-nltk.download(
     "wordnet",
-    download_dir=NLTK_DATA_DIR
-)
+]
+
+
+for resource in resources:
+
+    print(
+        f"Downloading: {resource}"
+    )
+
+    success = nltk.download(
+        resource,
+        download_dir=NLTK_DATA_DIR,
+        quiet=False
+    )
+
+    if not success:
+
+        raise RuntimeError(
+            f"Failed to download NLTK resource: {resource}"
+        )
 
 
 # ============================================================
 # VERIFY RESOURCES
 # ============================================================
 
-nltk.data.path.insert(
-    0,
-    NLTK_DATA_DIR
+print(
+    "\nVerifying NLTK resources..."
 )
 
 
-print("\nVerifying NLTK resources...")
+checks = [
+    "tokenizers/punkt",
+    "tokenizers/punkt_tab",
+    "corpora/wordnet",
+]
 
 
-nltk.data.find(
-    "tokenizers/punkt"
-)
+for resource in checks:
 
-nltk.data.find(
-    "tokenizers/punkt_tab"
-)
+    try:
 
-nltk.data.find(
-    "corpora/wordnet"
-)
+        nltk.data.find(
+            resource
+        )
+
+        print(
+            f"FOUND: {resource}"
+        )
+
+    except LookupError:
+
+        print(
+            f"NOT FOUND: {resource}"
+        )
+
+        raise
 
 
 print(
-    "NLTK resources downloaded and verified successfully"
+    "\nNLTK resources downloaded and verified successfully"
 )

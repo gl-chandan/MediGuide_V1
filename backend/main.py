@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import os
 import re
-import nltk
 import joblib
 
 from nltk.tokenize import word_tokenize
@@ -12,21 +11,17 @@ from nltk.stem import WordNetLemmatizer
 
 
 # ============================================================
-# NLTK
-# ============================================================
-
-# NLTK resources are installed separately.
-# Do not download them every time FastAPI starts.
-
-
-# ============================================================
-# LOAD TRAINED MODEL
+# BASE DIRECTORY
 # ============================================================
 
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
 )
 
+
+# ============================================================
+# LOAD TRAINED MODEL
+# ============================================================
 
 MODEL_PATH = os.path.join(
     BASE_DIR,
@@ -66,6 +61,7 @@ metadata = joblib.load(
 
 print("MODEL LOADED SUCCESSFULLY")
 
+
 # ============================================================
 # TEXT PREPROCESSING
 # ============================================================
@@ -78,6 +74,7 @@ def clean_text(text):
     # Lowercase
     text = text.lower()
 
+
     # Remove special characters and numbers
     text = re.sub(
         r"[^a-zA-Z\s]",
@@ -85,20 +82,30 @@ def clean_text(text):
         text
     )
 
+
     # Tokenization
     tokens = word_tokenize(text)
 
+
     clean_tokens = []
+
 
     for word in tokens:
 
-        if word.isalpha():
+        if word.isalpha() and len(word) > 2:
 
-            lemma = lemmatizer.lemmatize(word)
+            lemma = lemmatizer.lemmatize(
+                word
+            )
 
-            clean_tokens.append(lemma)
+            clean_tokens.append(
+                lemma
+            )
 
-    return " ".join(clean_tokens)
+
+    return " ".join(
+        clean_tokens
+    )
 
 
 # ============================================================
@@ -198,7 +205,9 @@ def predict(data: SymptomRequest):
         # CLEAN TEXT
         # ====================================================
 
-        cleaned = clean_text(user_text)
+        cleaned = clean_text(
+            user_text
+        )
 
 
         if not cleaned:
@@ -235,6 +244,7 @@ def predict(data: SymptomRequest):
             transformed
         )[0]
 
+
         classes = model.classes_
 
 
@@ -261,7 +271,9 @@ def predict(data: SymptomRequest):
         # CONFIDENCE
         # ====================================================
 
-        confidence = max(probabilities)
+        confidence = max(
+            probabilities
+        )
 
 
         # ====================================================
@@ -299,12 +311,17 @@ def predict(data: SymptomRequest):
 
     except Exception as e:
 
+        import traceback
+
         print(
             "Prediction Error:",
             str(e)
         )
 
+        traceback.print_exc()
+
+
         raise HTTPException(
             status_code=500,
-            detail="Internal prediction error."
-        ) 
+            detail=str(e)
+        )

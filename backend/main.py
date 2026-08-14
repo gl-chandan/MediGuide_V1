@@ -33,10 +33,47 @@ os.makedirs(
     exist_ok=True
 )
 
-nltk.data.path.append(
+nltk.data.path.insert(
+    0,
     NLTK_DATA_DIR
 )
 
+print(
+    "NLTK DATA PATH:",
+    NLTK_DATA_DIR
+)
+
+print(
+    "NLTK SEARCH PATHS:",
+    nltk.data.path
+)
+
+# ============================================================
+# VERIFY NLTK RESOURCES
+# ============================================================
+
+try:
+
+    nltk.data.find(
+        "tokenizers/punkt_tab"
+    )
+
+    nltk.data.find(
+        "corpora/wordnet"
+    )
+
+    print(
+        "NLTK RESOURCES FOUND"
+    )
+
+except LookupError as e:
+
+    print(
+        "NLTK RESOURCE ERROR:",
+        str(e)
+    )
+
+    raise
 # ============================================================
 # LOAD TRAINED MODEL
 # ============================================================

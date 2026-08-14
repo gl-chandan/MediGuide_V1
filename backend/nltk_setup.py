@@ -3,13 +3,17 @@ import nltk
 
 
 # ============================================================
-# NLTK DATA DIRECTORY
+# BASE DIRECTORY
 # ============================================================
 
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
 )
 
+
+# ============================================================
+# NLTK DATA DIRECTORY
+# ============================================================
 
 NLTK_DATA_DIR = os.path.join(
     BASE_DIR,
@@ -20,6 +24,12 @@ NLTK_DATA_DIR = os.path.join(
 os.makedirs(
     NLTK_DATA_DIR,
     exist_ok=True
+)
+
+
+print(
+    "NLTK DATA DIRECTORY:",
+    NLTK_DATA_DIR
 )
 
 
@@ -48,6 +58,32 @@ nltk.download(
 )
 
 
+# ============================================================
+# VERIFY RESOURCES
+# ============================================================
+
+nltk.data.path.insert(
+    0,
+    NLTK_DATA_DIR
+)
+
+
+print("\nVerifying NLTK resources...")
+
+
+nltk.data.find(
+    "tokenizers/punkt"
+)
+
+nltk.data.find(
+    "tokenizers/punkt_tab"
+)
+
+nltk.data.find(
+    "corpora/wordnet"
+)
+
+
 print(
-    "NLTK resources downloaded successfully"
+    "NLTK resources downloaded and verified successfully"
 )

@@ -9,6 +9,10 @@ import joblib
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
+NLTK_DATA_DIR = os.path.join(
+    BASE_DIR,
+    "nltk_data"
+)
 
 # ============================================================
 # BASE DIRECTORY

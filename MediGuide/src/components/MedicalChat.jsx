@@ -329,7 +329,7 @@ function MedicalChat() {
     try {
 
       const response = await fetch(
-        "http://127.0.0.1:8000/predict",
+        "https://mediguide-backend-nj6k.onrender.com/predict",
         {
 
           method: "POST",

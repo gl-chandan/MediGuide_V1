@@ -9,11 +9,6 @@ import joblib
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
-NLTK_DATA_DIR = os.path.join(
-    BASE_DIR,
-    "nltk_data"
-)
-
 # ============================================================
 # BASE DIRECTORY
 # ============================================================
@@ -22,6 +17,24 @@ BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
 )
 
+
+# ============================================================
+# NLTK DATA DIRECTORY
+# ============================================================
+
+NLTK_DATA_DIR = os.path.join(
+    BASE_DIR,
+    "nltk_data"
+)
+
+os.makedirs(
+    NLTK_DATA_DIR,
+    exist_ok=True
+)
+
+nltk.data.path.append(
+    NLTK_DATA_DIR
+)
 
 # ============================================================
 # LOAD TRAINED MODEL

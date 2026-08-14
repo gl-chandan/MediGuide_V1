@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import re
 import joblib
+import nltk
 
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
